@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import com.example.composition.R
-import com.example.composition.databinding.FragmentGameBinding
 import com.example.composition.databinding.FragmentGameFinishedBinding
 import com.example.composition.domain.entity.GameResult
 
@@ -43,8 +42,50 @@ class GameFinishedFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        setUpRetryGameButton()
+
+        bindViews()
+
+    }
+
+    private fun setUpRetryGameButton() {
         binding.buttonRetry.setOnClickListener {
             retryGame()
+        }
+    }
+
+    private fun bindViews() {
+
+        with(binding){
+            emojiResult.setImageResource(getImageResource())
+            tvScorePercentage.text = String.format(
+                getString(R.string.score_percentage),
+                getPercentOfRightAnswers()
+            )
+            tvScoreAnswers.text = String.format(
+                getString(R.string.score_answers),
+                gameResult.countOfRightAnswers
+            )
+            tvRequiredAnswers.text = String.format(
+                getString(R.string.required_score),
+                gameResult.gameSettings.minCountOfRightAnswers
+            )
+            tvRequiredPercentage.text = String.format(
+                getString(R.string.required_percentage),
+                gameResult.gameSettings.minPercentOfRightAnswers
+            )
+        }
+    }
+
+    private fun getPercentOfRightAnswers(): String {
+        return (gameResult.countOfRightAnswers * 100 / gameResult.countOfQuestions).toString()
+    }
+
+    private fun getImageResource() : Int{
+        return if (gameResult.winner) {
+            R.drawable.ic_smile
+        } else {
+            R.drawable.ic_sad
         }
     }
 
