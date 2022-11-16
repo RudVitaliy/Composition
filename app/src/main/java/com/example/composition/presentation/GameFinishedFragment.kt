@@ -18,9 +18,6 @@ class GameFinishedFragment : Fragment() {
 
     private val args by navArgs<GameFinishedFragmentArgs>()
 
-    private val gameResult by lazy {
-        args.gameResult
-    }
 
     private var _binding: FragmentGameFinishedBinding? = null
     private val binding: FragmentGameFinishedBinding
@@ -46,48 +43,13 @@ class GameFinishedFragment : Fragment() {
 
         setUpRetryGameButton()
 
-        bindViews()
+        binding.gameResult = args.gameResult
 
     }
 
     private fun setUpRetryGameButton() {
         binding.buttonRetry.setOnClickListener {
             retryGame()
-        }
-    }
-
-    private fun bindViews() {
-
-        with(binding){
-            emojiResult.setImageResource(getImageResource())
-            tvScorePercentage.text = String.format(
-                getString(R.string.score_percentage),
-                getPercentOfRightAnswers()
-            )
-            tvScoreAnswers.text = String.format(
-                getString(R.string.score_answers),
-                gameResult.countOfRightAnswers
-            )
-            tvRequiredAnswers.text = String.format(
-                getString(R.string.required_score),
-                gameResult.gameSettings.minCountOfRightAnswers
-            )
-            tvRequiredPercentage.text = String.format(
-                getString(R.string.required_percentage),
-                gameResult.gameSettings.minPercentOfRightAnswers
-            )
-        }
-    }
-
-    private fun getPercentOfRightAnswers(): String {
-        return (gameResult.countOfRightAnswers * 100 / gameResult.countOfQuestions).toString()
-    }
-
-    private fun getImageResource() : Int{
-        return if (gameResult.winner) {
-            R.drawable.ic_smile
-        } else {
-            R.drawable.ic_sad
         }
     }
 
